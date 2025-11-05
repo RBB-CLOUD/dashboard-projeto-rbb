@@ -1,24 +1,4 @@
 {
-  "version": 2,
-  "installCommand": "echo 'Skip install'",
-  "buildCommand": "echo 'No build needed'",
-  "outputDirectory": "dist",
-  "routes": [
-    {
-      "src": "/",
-      "dest": "/dashboard.html"
-    },
-    {
-      "src": "/dashboard.html",
-      "dest": "/dashboard.html"
-    },
-    {
-      "src": "/help.html",
-      "dest": "/help.html"
-    },
-    {
-      "src": "/assets/(.*)",
-      "dest": "/assets/$1"
-    }
-  ]
+  "buildCommand": "",
+  "outputDirectory": "dist"
 }
