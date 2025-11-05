@@ -1,0 +1,124 @@
+// api/RBB_Orquestrador.ts
+import { createClient } from "@supabase/supabase-js";
+import * as AgenteEmail from "./RBB_AgenteEmail";
+import * as AgentePaginas from "./RBB_AgentePaginas";
+import * as AgenteLogs from "./RBB_AgenteLogs";
+import * as AgenteDashboard from "./RBB_AgenteDashboard";
+import * as AgenteComandoGeral from "./RBB_AgenteComandoGeral";
+import * as AgenteExecutor from "./RBB_AgenteExecutor";
+import * as AgenteArquiteto from "./RBB_AgenteArquiteto";
+import * as AgenteAnalista from "./RBB_AgenteAnalista";
+import * as AgenteGitHub from "./RBB_AgenteGitHub";
+
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+);
+
+const AGENTES: Record<string, any> = {
+  RBB_AgenteEmail: AgenteEmail,
+  RBB_AgentePaginas: AgentePaginas,
+  RBB_AgenteLogs: AgenteLogs,
+  RBB_AgenteDashboard: AgenteDashboard,
+  RBB_AgenteComandoGeral: AgenteComandoGeral,
+  RBB_AgenteExecutor: AgenteExecutor,
+  RBB_AgenteArquiteto: AgenteArquiteto,
+  RBB_AgenteAnalista: AgenteAnalista,
+  RBB_AgenteGitHub: AgenteGitHub,
+};
+
+export async function processar() {
+  const { data: tarefas, error } = await supabase
+    .from("agentes_tarefas")
+    .select("*")
+    .eq("status", "fila")
+    .order("prioridade", { ascending: false })
+    .order("created_at", { ascending: true })
+    .limit(10);
+  
+  if (error) {
+    console.log("❌ Erro ao buscar tarefas:", error);
+    return;
+  }
+  
+  if (!tarefas || tarefas.length === 0) {
+    console.log(`🚀 Processando ${0} tarefa(s)...`);
+    return;
+  }
+  
+  console.log(`🚀 Processando ${tarefas.length} tarefa(s)...`);
+
+  for (const tarefa of tarefas) {
+    await supabase
+      .from("agentes_tarefas")
+      .update({ status: "processando" })
+      .eq("id", tarefa.id);
+
+    const agente = AGENTES[tarefa.agente];
+    if (!agente) {
+      const errorDetails = {
+        message: `Agente não encontrado: ${tarefa.agente}`,
+        tarefa_id: tarefa.id,
+        agentes_disponiveis: Object.keys(AGENTES),
+      };
+      await supabase
+        .from("agentes_tarefas")
+        .update({
+          status: "erro",
+          resultado: JSON.stringify({ error: errorDetails }),
+        })
+        .eq("id", tarefa.id);
+      await supabase
+        .from("logs_agentes")
+        .insert({
+          agente: "RBB_Orquestrador",
+          level: "error",
+          message: `Agente não encontrado: ${tarefa.agente}`,
+          meta: errorDetails,
+        });
+      continue;
+    }
+
+    try {
+      const preview = tarefa.payload?.dry_run === true ? "[DRY-RUN]" : "";
+      console.log(
+        `▶️ ${preview} ${tarefa.agente}:${tarefa.tipo} #${tarefa.id}`,
+      );
+
+      const resultado = await agente.executar(tarefa);
+      await supabase
+        .from("agentes_tarefas")
+        .update({
+          status: "concluido",
+          resultado:
+            typeof resultado === "string"
+              ? resultado
+              : JSON.stringify(resultado),
+        })
+        .eq("id", tarefa.id);
+    } catch (err: any) {
+      const errorDetails = {
+        message: err.message,
+        stack: err.stack,
+        tarefa_id: tarefa.id,
+        agente: tarefa.agente,
+        tipo: tarefa.tipo,
+      };
+      await supabase
+        .from("agentes_tarefas")
+        .update({
+          status: "erro",
+          resultado: JSON.stringify({ error: errorDetails }),
+        })
+        .eq("id", tarefa.id);
+      await supabase
+        .from("logs_agentes")
+        .insert({
+          agente: tarefa.agente,
+          level: "error",
+          message: `Erro na tarefa ${tarefa.id}: ${err.message}`,
+          meta: errorDetails,
+        });
+    }
+  }
+}

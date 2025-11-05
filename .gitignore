@@ -1,0 +1,14 @@
+node_modules/
+.env
+.env.local
+*.log
+.replit
+replit.nix
+.upm/
+.config/
+uploads/
+*.tar.gz
+backup*/
+staging/
+.DS_Store
+Thumbs.db
