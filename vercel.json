@@ -1,37 +1,23 @@
 {
   "version": 2,
-  "name": "painel-controle-rbb",
-  "builds": [
-    {
-      "src": "dist/**",
-      "use": "@vercel/static"
-    }
-  ],
+  "buildCommand": "echo 'No build needed'",
+  "outputDirectory": "dist",
   "routes": [
     {
+      "src": "/",
+      "dest": "/dashboard.html"
+    },
+    {
       "src": "/dashboard.html",
-      "dest": "/dist/dashboard.html"
+      "dest": "/dashboard.html"
     },
     {
       "src": "/help.html",
-      "dest": "/dist/help.html"
+      "dest": "/help.html"
     },
     {
       "src": "/assets/(.*)",
-      "dest": "/dist/assets/$1"
-    },
-    {
-      "src": "/",
-      "dest": "/dist/index.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/dist/$1"
+      "dest": "/assets/$1"
     }
-  ],
-  "env": {
-    "SUPABASE_URL": "@supabase_url",
-    "SUPABASE_ANON_KEY": "@supabase_anon_key",
-    "RESEND_API_KEY": "@resend_api_key"
-  }
+  ]
 }
