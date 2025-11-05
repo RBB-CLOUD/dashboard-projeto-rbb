@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "installCommand": "echo 'Skip install'",
   "buildCommand": "echo 'No build needed'",
   "outputDirectory": "dist",
   "routes": [
