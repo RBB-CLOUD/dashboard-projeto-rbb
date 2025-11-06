@@ -9,6 +9,11 @@ import * as AgenteExecutor from "./RBB_AgenteExecutor";
 import * as AgenteArquiteto from "./RBB_AgenteArquiteto";
 import * as AgenteAnalista from "./RBB_AgenteAnalista";
 import * as AgenteGitHub from "./RBB_AgenteGitHub";
+import * as ArquitetoAutonomo from "./autonomous/ARQUITETO";
+import * as ExecutorAutonomo from "./autonomous/EXECUTOR";
+import * as ContentCreator from "./autonomous/CONTENT_CREATOR";
+import * as DeployMaster from "./autonomous/DEPLOY_MASTER";
+import * as OrquestradorAutonomo from "./autonomous/ORQUESTRADOR";
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -25,6 +30,11 @@ const AGENTES: Record<string, any> = {
   RBB_AgenteArquiteto: AgenteArquiteto,
   RBB_AgenteAnalista: AgenteAnalista,
   RBB_AgenteGitHub: AgenteGitHub,
+  ARQUITETO_AUTONOMO: ArquitetoAutonomo,
+  EXECUTOR_AUTONOMO: ExecutorAutonomo,
+  CONTENT_CREATOR: ContentCreator,
+  DEPLOY_MASTER: DeployMaster,
+  ORQUESTRADOR_AUTONOMO: OrquestradorAutonomo,
 };
 
 export async function processar() {
@@ -47,20 +57,22 @@ export async function processar() {
   }
   
   console.log(`🚀 Processando ${tarefas.length} tarefa(s)...`);
-
+  
   for (const tarefa of tarefas) {
     await supabase
       .from("agentes_tarefas")
       .update({ status: "processando" })
       .eq("id", tarefa.id);
-
+      
     const agente = AGENTES[tarefa.agente];
+    
     if (!agente) {
       const errorDetails = {
         message: `Agente não encontrado: ${tarefa.agente}`,
         tarefa_id: tarefa.id,
         agentes_disponiveis: Object.keys(AGENTES),
       };
+      
       await supabase
         .from("agentes_tarefas")
         .update({
@@ -68,6 +80,7 @@ export async function processar() {
           resultado: JSON.stringify({ error: errorDetails }),
         })
         .eq("id", tarefa.id);
+        
       await supabase
         .from("logs_agentes")
         .insert({
@@ -76,16 +89,18 @@ export async function processar() {
           message: `Agente não encontrado: ${tarefa.agente}`,
           meta: errorDetails,
         });
+        
       continue;
     }
-
+    
     try {
       const preview = tarefa.payload?.dry_run === true ? "[DRY-RUN]" : "";
       console.log(
         `▶️ ${preview} ${tarefa.agente}:${tarefa.tipo} #${tarefa.id}`,
       );
-
+      
       const resultado = await agente.executar(tarefa);
+      
       await supabase
         .from("agentes_tarefas")
         .update({
@@ -96,6 +111,7 @@ export async function processar() {
               : JSON.stringify(resultado),
         })
         .eq("id", tarefa.id);
+        
     } catch (err: any) {
       const errorDetails = {
         message: err.message,
@@ -104,6 +120,7 @@ export async function processar() {
         agente: tarefa.agente,
         tipo: tarefa.tipo,
       };
+      
       await supabase
         .from("agentes_tarefas")
         .update({
@@ -111,6 +128,7 @@ export async function processar() {
           resultado: JSON.stringify({ error: errorDetails }),
         })
         .eq("id", tarefa.id);
+        
       await supabase
         .from("logs_agentes")
         .insert({
