@@ -1,35 +1,64 @@
 {
+  "name": "dashboard-rbb",
+  "version": "1.0.0",
+  "description": "Dashboard RBB Cloud - Sistema Multi-Agente",
+  "main": "server.js",
+  "type": "commonjs",
   "scripts": {
     "start": "node start.js",
     "dev": "node start.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.37.0",
+    "@supabase/supabase-js": "^2.77.0",
+    "openai": "^6.7.0",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.1",
+    "resend": "^6.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
 ```
 
 ---
 
-### **Verificar variáveis ESSENCIAIS na Render:**
+## **VARIÁVEIS DE AMBIENTE (na Render):**
 
-Na lista que você enviou, **PRECISA TER EXATAMENTE:**
-```
-SUPABASE_URL
-SUPABASE_SERVICE_ROLE_KEY
-ANTHROPIC_API_KEY
-OPENAI_API_KEY
-```
+**NÃO vão no código!** Já estão configuradas na Render! ✅
 
-**Se faltar alguma, o orquestrador não roda!**
+Você mostrou que já tem:
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `ANTHROPIC_API_KEY`
+- `OPENAI_API_KEY`
+- `VERCEL_TOKEN`
+
+**Está correto!**
 
 ---
 
 ## **CHECKLIST:**
 
-- [ ] Criar `start.js` na raiz
-- [ ] Atualizar `package.json` (script start)
-- [ ] Commit e push
-- [ ] Render vai fazer redeploy automático
-- [ ] Aguardar logs mostrarem:
+1. **Substitui `package.json`** (conteúdo acima)
+2. **Verifica `start.js`** (já está correto no seu print)
+3. **Commit e push**
+4. **Render redeploy automático**
+5. **Aguarda logs mostrarem ambos rodando**
+
+---
+
+## **DEPOIS DO DEPLOY, OS LOGS DEVEM MOSTRAR:**
 ```
-  🚀 Servidor rodando em http://0.0.0.0:5000
-  🛰️ RBB Cloud Worker iniciando...
-  ✅ Verificando tarefas a cada 5s...
+🚀 Iniciando RBB Cloud System...
+
+🚀 Servidor rodando em http://0.0.0.0:5000
+🛰️ RBB Cloud Worker iniciando...
+📍 Conectado ao Supabase
+✅ Verificando tarefas a cada 5s...
