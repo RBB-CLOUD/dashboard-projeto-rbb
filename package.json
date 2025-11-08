@@ -1,5 +1,35 @@
 {
-  "name": "dashboard-rbb",
-  "version": "1.0.0",
-  "private": true
+  "scripts": {
+    "start": "node start.js",
+    "dev": "node start.js"
+  }
 }
+```
+
+---
+
+### **Verificar variáveis ESSENCIAIS na Render:**
+
+Na lista que você enviou, **PRECISA TER EXATAMENTE:**
+```
+SUPABASE_URL
+SUPABASE_SERVICE_ROLE_KEY
+ANTHROPIC_API_KEY
+OPENAI_API_KEY
+```
+
+**Se faltar alguma, o orquestrador não roda!**
+
+---
+
+## **CHECKLIST:**
+
+- [ ] Criar `start.js` na raiz
+- [ ] Atualizar `package.json` (script start)
+- [ ] Commit e push
+- [ ] Render vai fazer redeploy automático
+- [ ] Aguardar logs mostrarem:
+```
+  🚀 Servidor rodando em http://0.0.0.0:5000
+  🛰️ RBB Cloud Worker iniciando...
+  ✅ Verificando tarefas a cada 5s...
