@@ -1,5 +1,3 @@
-// dashboard-projeto-rbb/start.js
-
 const { spawn } = require('child_process');
 
 console.log('🚀 Iniciando RBB Cloud System...\n');
@@ -9,7 +7,7 @@ const server = spawn('node', ['server.js'], {
   env: process.env
 });
 
-const worker = spawn('npx', ['tsx', 'src/index.ts'], {
+const worker = spawn('npx', ['tsx', 'index.ts'], {
   stdio: 'inherit',
   env: process.env
 });
