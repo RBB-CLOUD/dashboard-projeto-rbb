@@ -4,7 +4,6 @@ import * as AgenteEmail from "./RBB_AgenteEmail";
 import * as AgentePaginas from "./RBB_AgentePaginas";
 import * as AgenteLogs from "./RBB_AgenteLogs";
 import * as AgenteDashboard from "./RBB_AgenteDashboard";
-import * as AgenteComandoGeral from "./RBB_AgenteComandoGeral";
 import * as AgenteExecutor from "./RBB_AgenteExecutor";
 import * as AgenteArquiteto from "./RBB_AgenteArquiteto";
 import * as AgenteAnalista from "./RBB_AgenteAnalista";
@@ -25,7 +24,6 @@ const AGENTES: Record<string, any> = {
   RBB_AgentePaginas: AgentePaginas,
   RBB_AgenteLogs: AgenteLogs,
   RBB_AgenteDashboard: AgenteDashboard,
-  RBB_AgenteComandoGeral: AgenteComandoGeral,
   RBB_AgenteExecutor: AgenteExecutor,
   RBB_AgenteArquiteto: AgenteArquiteto,
   RBB_AgenteAnalista: AgenteAnalista,
