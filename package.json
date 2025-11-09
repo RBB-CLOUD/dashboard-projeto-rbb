@@ -1,27 +1,10 @@
 {
   "name": "dashboard-rbb",
   "version": "1.0.0",
-  "description": "Dashboard RBB Cloud",
-  "main": "server.js",
-  "type": "commonjs",
+  "description": "Dashboard RBB - Site estático",
   "scripts": {
-    "start": "node start.js",
-    "dev": "node start.js"
+    "build": "echo 'Static site - no build needed'",
+    "start": "echo 'Static site deployed'"
   },
-  "dependencies": {
-    "@anthropic-ai/sdk": "^0.37.0",
-    "@supabase/supabase-js": "^2.77.0",
-    "openai": "^6.7.0",
-    "express": "^5.1.0",
-    "express-rate-limit": "^7.5.1",
-    "resend": "^6.3.0"
-  },
-  "devDependencies": {
-    "@types/node": "^24.9.2",
-    "tsx": "^4.20.6",
-    "typescript": "^5.7.3"
-  },
-  "engines": {
-    "node": ">=20.0.0"
-  }
+  "type": "module"
 }
