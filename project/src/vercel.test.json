@@ -1,12 +1,8 @@
-{
+cd ~/project/src
+echo '{
   "version": 2,
   "name": "painel-controle-rbb",
-  "builds": [
-    {
-      "src": "dist/**",
-      "use": "@vercel/static"
-    }
-  ],
+  "builds": [{ "src": "dist/**", "use": "@vercel/static" }],
   "rewrites": [
     { "source": "/dashboard.html", "destination": "/dist/dashboard.html" },
     { "source": "/help.html", "destination": "/dist/help.html" },
@@ -19,4 +15,4 @@
     "SUPABASE_ANON_KEY": "@supabase_anon_key",
     "RESEND_API_KEY": "@resend_api_key"
   }
-}
+}' > vercel.test.json
