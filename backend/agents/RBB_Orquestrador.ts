@@ -1,13 +1,5 @@
 // api/RBB_Orquestrador.ts
 import { createClient } from "@supabase/supabase-js";
-import * as AgenteEmail from "./RBB_AgenteEmail";
-import * as AgentePaginas from "./RBB_AgentePaginas";
-import * as AgenteLogs from "./RBB_AgenteLogs";
-import * as AgenteDashboard from "./RBB_AgenteDashboard";
-import * as AgenteExecutor from "./RBB_AgenteExecutor";
-import * as AgenteArquiteto from "./RBB_AgenteArquiteto";
-import * as AgenteAnalista from "./RBB_AgenteAnalista";
-import * as AgenteGitHub from "./RBB_AgenteGitHub";
 import * as ArquitetoAutonomo from "./autonomous/ARQUITETO";
 import * as ExecutorAutonomo from "./autonomous/EXECUTOR";
 import * as ContentCreator from "./autonomous/CONTENT_CREATOR";
@@ -20,14 +12,6 @@ const supabase = createClient(
 );
 
 const AGENTES: Record<string, any> = {
-  RBB_AgenteEmail: AgenteEmail,
-  RBB_AgentePaginas: AgentePaginas,
-  RBB_AgenteLogs: AgenteLogs,
-  RBB_AgenteDashboard: AgenteDashboard,
-  RBB_AgenteExecutor: AgenteExecutor,
-  RBB_AgenteArquiteto: AgenteArquiteto,
-  RBB_AgenteAnalista: AgenteAnalista,
-  RBB_AgenteGitHub: AgenteGitHub,
   ARQUITETO_AUTONOMO: ArquitetoAutonomo,
   EXECUTOR_AUTONOMO: ExecutorAutonomo,
   CONTENT_CREATOR: ContentCreator,
