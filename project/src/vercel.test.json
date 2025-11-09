@@ -1,9 +1,11 @@
-cat > vercel.test.json <<'JSON'
 {
   "version": 2,
   "name": "painel-controle-rbb",
   "builds": [
-    { "src": "dist/**", "use": "@vercel/static" }
+    {
+      "src": "dist/**",
+      "use": "@vercel/static"
+    }
   ],
   "rewrites": [
     { "source": "/dashboard.html", "destination": "/dist/dashboard.html" },
@@ -18,6 +20,3 @@ cat > vercel.test.json <<'JSON'
     "RESEND_API_KEY": "@resend_api_key"
   }
 }
-JSON
-git add vercel.test.json
-git commit -m "config de teste: rewrites sem routes"
