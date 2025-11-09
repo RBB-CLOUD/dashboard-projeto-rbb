@@ -16,8 +16,12 @@
       "dest": "/site/dashboard.html"
     },
     {
+      "src": "^/(.*\\.(?:html|js|css|png|jpg|jpeg|gif|svg|webp|ico))$",
+      "dest": "/site/$1"
+    },
+    {
       "src": "^/(.*)",
-      "dest": "/$1"
+      "dest": "/site/$1"
     }
   ],
   "headers": [
