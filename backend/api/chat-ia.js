@@ -1,8 +1,14 @@
 const OpenAI = require('openai');
+const { createClient } = require('@supabase/supabase-js');
+const Anthropic = require('@anthropic-ai/sdk');
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
+// 🔐 Configurações seguras — chaves ficam na Vercel / Supabase
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const claude = new Anthropic({ apiKey: process.env.CLAUDE_API_KEY });
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -58,14 +64,14 @@ Você está aqui para CONVERSAR e ORIENTAR, não para executar ações.`
       }))
     ];
 
-    // ⭐ ADICIONA MENSAGEM COM IMAGEM SE HOUVER
+    // Adiciona imagem se houver
     if (imagem && imagem.base64) {
       mensagens.push({
         role: 'user',
         content: [
           {
             type: 'text',
-            text: mensagem || 'O que você vê nesta imagem? Me ajude a entender o que o usuário quer.'
+            text: mensagem || 'O que você vê nesta imagem?'
           },
           {
             type: 'image_url',
@@ -82,7 +88,7 @@ Você está aqui para CONVERSAR e ORIENTAR, não para executar ações.`
       });
     }
 
-    // ⭐ USA GPT-4 VISION SE TIVER IMAGEM
+    // Usa GPT-4 Vision se tiver imagem
     const modelo = imagem ? 'gpt-4o' : 'gpt-4o-mini';
 
     const completion = await openai.chat.completions.create({
@@ -94,11 +100,26 @@ Você está aqui para CONVERSAR e ORIENTAR, não para executar ações.`
 
     const resposta = completion.choices[0].message.content;
 
+    // Retorna resposta pro front
     res.status(200).json({
       success: true,
       resposta: resposta,
       timestamp: new Date().toISOString()
     });
+
+    // 🔄 Envia pro Supabase (realtime + log)
+    supabase
+      .from('messages')
+      .insert([
+        {
+          agent: 'Arquiteto_IA',
+          message: resposta,
+          role: 'assistant',
+          created_at: new Date()
+        }
+      ])
+      .then(() => console.log('📡 Mensagem enviada pro Supabase Realtime'))
+      .catch(err => console.error('Erro Supabase:', err));
 
   } catch (error) {
     console.error('Erro ao chamar OpenAI:', error);
@@ -107,4 +128,4 @@ Você está aqui para CONVERSAR e ORIENTAR, não para executar ações.`
       error: error.message
     });
   }
-}
+};
