@@ -1,0 +1,23 @@
+cat > vercel.test.json <<'JSON'
+{
+  "version": 2,
+  "name": "painel-controle-rbb",
+  "builds": [
+    { "src": "dist/**", "use": "@vercel/static" }
+  ],
+  "rewrites": [
+    { "source": "/dashboard.html", "destination": "/dist/dashboard.html" },
+    { "source": "/help.html", "destination": "/dist/help.html" },
+    { "source": "/assets/(.*)", "destination": "/dist/assets/$1" },
+    { "source": "/", "destination": "/dist/index.html" },
+    { "source": "/(.*)", "destination": "/dist/$1" }
+  ],
+  "env": {
+    "SUPABASE_URL": "@supabase_url",
+    "SUPABASE_ANON_KEY": "@supabase_anon_key",
+    "RESEND_API_KEY": "@resend_api_key"
+  }
+}
+JSON
+git add vercel.test.json
+git commit -m "config de teste: rewrites sem routes"
