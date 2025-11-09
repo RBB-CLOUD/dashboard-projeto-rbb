@@ -1,50 +1,29 @@
 {
   "version": 2,
-  "name": "dashboard-rbb",
-  "builds": [
-    {
-      "src": "site/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "start.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "backend/**/*.ts",
-      "use": "@vercel/node"
-    }
-  ],
   "routes": [
     {
       "src": "^/$",
-      "dest": "/site/dashboard.html",
-      "status": 200
+      "dest": "/site/dashboard.html"
     },
     {
       "src": "^/dashboard/?$",
-      "dest": "/site/dashboard.html",
-      "status": 200
+      "dest": "/site/dashboard.html"
     },
     {
       "src": "^/console/?$",
-      "dest": "/site/dashboard.html",
-      "status": 200
+      "dest": "/site/dashboard.html"
     },
     {
       "src": "^/site/(.*)",
-      "dest": "/site/$1",
-      "status": 200
+      "dest": "/site/$1"
     },
     {
       "src": "^/api/(.*)",
-      "dest": "/backend/api/$1",
-      "status": 200
+      "dest": "/backend/api/$1"
     },
     {
       "src": "^/(.*\\.(css|js|png|jpg|jpeg|gif|svg|ico|json|woff|woff2|ttf|eot|html))$",
-      "dest": "/site/$1",
-      "status": 200
+      "dest": "/site/$1"
     }
   ],
   "headers": [
@@ -56,8 +35,5 @@
         { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" }
       ]
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }
