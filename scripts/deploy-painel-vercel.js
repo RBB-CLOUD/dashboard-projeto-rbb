@@ -1,6 +1,6 @@
 const https = require('https');
 
-const VERCEL_TOKEN = process.env.VERCEL_TOKEN;
+const VERCEL_TOKEN = https://console.radiobusinessbrasil.com.br;
 const PROJECT_NAME = 'painel-controle-rbb';
 const GITHUB_REPO = 'lhsmorais-art/painel-controle-rbb';
 
